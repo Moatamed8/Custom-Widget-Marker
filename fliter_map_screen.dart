@@ -1,17 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:reaaia/model/myNetwok/fliter_user_model.dart';
-import 'package:reaaia/screens/myNetwork/component/custom_marker_generator.dart';
-import 'package:reaaia/utils/ColorsUtils.dart';
-import 'package:reaaia/viewModels/locale/appLocalization.dart';
-import 'package:reaaia/viewModels/myNetworkProvider/my_network_provider.dart';
-import '../customFunctions.dart';
-import 'component/widget/custom_marker.dart';
-import 'component/widget/icon_widget.dart';
+
 
 import 'dart:typed_data';
 
