@@ -23,17 +23,12 @@ class FliterMapScreen extends StatefulWidget {
 class _FliterMapScreenState extends State<FliterMapScreen> {
   GoogleMapController _mapcontroller;
   LatLng latLng;
-  bool isSelecting = false;
-  var location;
+
   BitmapDescriptor customIcon;
   final Set<Marker> markers = new Set();
   List<Marker> listMarkers = [];
 
-  @override
-  void didChangeDependencies() async {
-    location = await Location().getLocation();
-    super.didChangeDependencies();
-  }
+  
 
   @override
   void initState() {
@@ -55,9 +50,7 @@ class _FliterMapScreenState extends State<FliterMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsUtils.greyColor,
-      body: NetworkProvider.of(context, listen: true).isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Container(
+      body: Container(
               width: double.infinity,
               height: double.infinity,
               child: Stack(
@@ -80,309 +73,7 @@ class _FliterMapScreenState extends State<FliterMapScreen> {
                       myLocationButtonEnabled: false,
                       zoomControlsEnabled: false,
                     ),
-                  ),
-                  Positioned(
-                    bottom: 25,
-                    right: 0,
-                    left: 20,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(""),
-                              CustomIcon(
-                                icon: "assets/icons/ic_current_location.svg",
-                                color: Colors.white,
-                                function: getMyLocation,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 150,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: NetworkProvider.of(context)
-                                  .filterdList
-                                  .length,
-                              itemBuilder: (context, index) => Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          _mapcontroller.animateCamera(
-                                              CameraUpdate.newCameraPosition(
-                                            CameraPosition(
-                                                target: LatLng(
-                                                    NetworkProvider.of(context)
-                                                        .filterdList[index]
-                                                        .latitude,
-                                                    NetworkProvider.of(context)
-                                                        .filterdList[index]
-                                                        .longitude),
-                                                zoom: 14.7),
-                                          ));
-                                        },
-                                        child: Container(
-                                          height: 121.h,
-                                          padding: EdgeInsets.only(
-                                              top: 20,
-                                              bottom: 20,
-                                              right: 16,
-                                              left: 16),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Color.fromRGBO(
-                                                      0, 64, 128, 0.04),
-                                                  blurRadius: 10,
-                                                  offset: Offset(0, 5)),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Stack(
-                                                children: [
-                                                  Container(
-                                                    height: 64.w,
-                                                    width: 64.w,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              17.5),
-                                                      image: DecorationImage(
-                                                          image: NetworkImage(
-                                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJZG-8Pk5VYr_MOP4Ks3uEeZdArTUAizNRwg&usqp=CAU',
-                                                          ),
-                                                          fit: BoxFit.fill),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    top: 0,
-                                                    right: 0,
-                                                    child: Container(
-                                                      height: 10.w,
-                                                      width: 10.w,
-                                                      decoration: BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          color: ColorsUtils
-                                                              .greenBorder,
-                                                          border: Border.all(
-                                                              width: 0.8,
-                                                              color: Colors
-                                                                  .white)),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    bottom: 0,
-                                                    right: 0,
-                                                    child: Container(
-                                                      width: 24.w,
-                                                      height: 24.w,
-                                                      decoration: BoxDecoration(
-                                                        color: ColorsUtils
-                                                            .starColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7.5),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.people,
-                                                        color: Colors.white,
-                                                        size: 15,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                  width: ScreenUtil()
-                                                      .setWidth(17)),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    "${NetworkProvider.of(context).filterdList[index].name}",
-                                                    style: TextStyle(
-                                                        color: ColorsUtils
-                                                            .blueColor,
-                                                        fontSize: ScreenUtil()
-                                                            .setSp(15),
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontFamily: 'Bahij'),
-                                                  ),
-                                                  Container(
-                                                    width: 190,
-                                                    child: Text(
-                                                      "${NetworkProvider.of(context).filterdList[index].jobTitle}",
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color: ColorsUtils
-                                                              .textGrey,
-                                                          fontSize: ScreenUtil()
-                                                              .setSp(13),
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontFamily: 'Bahij'),
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .baseline,
-                                                    textBaseline:
-                                                        TextBaseline.alphabetic,
-                                                    children: [
-                                                      // STAR
-                                                      Container(
-                                                        width: 12.w,
-                                                        height: 12.w,
-                                                        child: Icon(
-                                                          Icons.star,
-                                                          color: ColorsUtils
-                                                              .starColor,
-                                                          size: 12,
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                          width: ScreenUtil()
-                                                              .setWidth(5)),
-
-                                                      Text(
-                                                        "${NetworkProvider.of(context).filterdList[index].rating}",
-                                                        style: TextStyle(
-                                                            color: ColorsUtils
-                                                                .textGrey,
-                                                            fontSize:
-                                                                ScreenUtil()
-                                                                    .setSp(12),
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontFamily:
-                                                                'Bahij'),
-                                                      ),
-                                                      SizedBox(
-                                                          width: ScreenUtil()
-                                                              .setWidth(5)),
-
-                                                      Text(
-                                                        '(${NetworkProvider.of(context).filterdList[index].rating} ' +
-                                                            AppLocalizations.of(
-                                                                    context)
-                                                                .translate(
-                                                                    "reviews") +
-                                                            ')',
-                                                        style: TextStyle(
-                                                            color: ColorsUtils
-                                                                .textGrey,
-                                                            fontSize:
-                                                                ScreenUtil()
-                                                                    .setSp(12),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontFamily:
-                                                                'Bahij'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Container(
-                                                    width: 190,
-                                                    child: Text(
-                                                      "${NetworkProvider.of(context).filterdList[index].address}",
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color: ColorsUtils
-                                                              .textGrey,
-                                                          fontSize: ScreenUtil()
-                                                              .setSp(13),
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontFamily: 'Bahij'),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                    ],
-                                  )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    top: 50,
-                    right: 20,
-                    left: 20,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            CustomFunctions.popScreen(context);
-                          },
-                          child: Container(
-                              //margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-                              height: 40,
-                              width: 40,
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: ColorsUtils.lightColorBorder,
-                                      width: 1.sp),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Icon(
-                                Icons.arrow_back_rounded,
-                                color: ColorsUtils.darkBlue,
-                                size: 25.sp,
-                              )),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                              //margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-                              height: 40,
-                              width: 40,
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  color: ColorsUtils.starColor,
-                                  border: Border.all(
-                                      color: ColorsUtils.lightColorBorder,
-                                      width: 1.sp),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Transform.scale(
-                                scale: .75,
-                                child: SvgPicture.asset(
-                                  "assets/icons/ic_filter.svg",
-                                  color: Colors.white,
-                                  width: 15.sp,
-                                  height: 15.sp,
-                                ),
-                              )),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+                 ],
               ),
             ),
     );
@@ -402,7 +93,7 @@ class _FliterMapScreenState extends State<FliterMapScreen> {
           zoom: 14.7),
     ));
   }
-
+// get list of marker from api 
   Set<Marker> getMarkers() {
     setState(() {
       for (int i = 0; i < NetworkProvider.of(context).filterdList.length; i++) {
@@ -423,7 +114,7 @@ class _FliterMapScreenState extends State<FliterMapScreen> {
     });
     return markers;
   }
-
+// maeker Generator to generate markers 
   void getNearbyServiceProviders() async {
     await NetworkProvider.of(context).getFlitered(context,
         lat: "30.17957524640885", lng: "31.343290731310844");
@@ -444,11 +135,11 @@ class _FliterMapScreenState extends State<FliterMapScreen> {
         .map(_getMarkerWidget)
         .toList();
   }
-
+///// Your Custom marker Widget 
   Widget _getMarkerWidget(FilterData myData) {
     return CustomMarkerMap(myData);
   }
-
+// when you need widget marker it should convert to put in map so u should use this function
   List<Marker> mapBitmapsToMarkers(List myData, List<Uint8List> bitmaps) {
     final markersList = <Marker>[];
     bitmaps.asMap().forEach((i, bmp) {
